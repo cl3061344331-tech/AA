@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💛 送给你的话</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&family=Liu+Jian+Mao+Cao&family=ZCOOL+XiaoWei&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(160deg, #e8f5e9 0%, #f1f8e9 30%, #fff8e1 60%, #fce4ec 100%);
+    font-family: 'ZCOOL KuaiLe', cursive;
+    position: relative;
+  }
+
+  body::before, body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::before {
+    width: 400px; height: 400px;
+    top: -100px; right: -80px;
+    background: radial-gradient(circle, rgba(255,183,197,0.25), transparent 70%);
+  }
+  body::after {
+    width: 500px; height: 500px;
+    bottom: -150px; left: -100px;
+    background: radial-gradient(circle, rgba(167,219,156,0.2), transparent 70%);
+  }
+
+  .flora {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    animation: floatFlora linear infinite;
+    opacity: 0;
+  }
+
+  @keyframes floatFlora {
+    0%   { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+    8%   { opacity: 0.65; }
+    85%  { opacity: 0.65; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+  }
+
+  .notes-wall { position: fixed; inset: 0; z-index: 1; padding-top: 10px; }
+
+  .note {
+    position: absolute;
+    padding: 12px 18px;
+    border-radius: 3px;
+    cursor: default;
+    user-select: none;
+    box-shadow: 2px 3px 10px rgba(0,0,0,0.1), inset 0 -1px 4px rgba(0,0,0,0.04);
+    opacity: 0;
+    transform: scale(0.3) rotate(15deg);
+    transition: transform 0.35s cubic-bezier(.175,.885,.32,1.275), box-shadow 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .note.show {
+    animation: noteAppear 0.6s cubic-bezier(.175,.885,.32,1.275) forwards;
+  }
+
+  .note::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 26px; height: 5px;
+    background: rgba(0,0,0,0.06);
+    border-radius: 0 0 3px 3px;
+  }
+
+  .note:hover {
+    transform: scale(1.18) rotate(0deg) !important;
+    box-shadow: 4px 8px 25px rgba(0,0,0,0.15), 0 0 20px rgba(255,255,255,0.3);
+    z-index: 999 !important;
+  }
+
+  .note .text {
+    font-size: clamp(13px, 2.6vw, 19px);
+    line-height: 1.4;
+    color: rgba(0,0,0,0.75);
+  }
+
+  .note .text.font-1 { font-family: 'Ma Shan Zheng', cursive; font-size: clamp(15px, 3vw, 23px); }
+  .note .text.font-2 { font-family: 'ZCOOL KuaiLe', cursive; }
+  .note .text.font-3 { font-family: 'Liu Jian Mao Cao', cursive; font-size: clamp(17px, 3.2vw, 25px); }
+  .note .text.font-4 { font-family: 'ZCOOL XiaoWei', serif; }
+
+  @keyframes noteAppear {
+    0%   { opacity: 0; transform: scale(0.3) rotate(15deg) translateY(30px); }
+    60%  { opacity: 1; transform: scale(1.05) rotate(var(--rot)) translateY(-5px); }
+    100% { opacity: 1; transform: scale(1) rotate(var(--rot)) translateY(0); }
+  }
+
+  .heart-burst {
+    position: fixed;
+    pointer-events: none;
+    z-index: 2000;
+    animation: burstFade 1s ease-out forwards;
+    font-size: 24px;
+  }
+
+  @keyframes burstFade {
+    0%   { opacity: 1; transform: scale(0.5) translateY(0); }
+    100% { opacity: 0; transform: scale(1.5) translateY(-60px); }
+  }
+
+  .refresh-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 200;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+    color: #666;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  .refresh-btn:hover {
+    background: rgba(255,255,255,0.9);
+    transform: rotate(180deg) scale(1.1);
+  }
+
+  .hint {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(0,0,0,0.25);
+    font-size: 12px;
+    z-index: 100;
+    font-family: 'ZCOOL XiaoWei', serif;
+    animation: hintPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes hintPulse {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 0.45; }
+  }
+
+  .corner-deco {
+    position: fixed;
+    z-index: 0;
+    font-size: 38px;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  .corner-deco.tl { top: 10px; left: 12px; }
+  .corner-deco.tr { top: 10px; right: 12px; }
+  .corner-deco.bl { bottom: 10px; left: 12px; }
+  .corner-deco.br { bottom: 58px; right: 68px; }
+</style>
+</head>
+<body>
+
+<div class="corner-deco tl">🌸</div>
+<div class="corner-deco tr">🌿</div>
+<div class="corner-deco bl">🌷</div>
+<div class="corner-deco br">🍃</div>
+
+<div class="notes-wall" id="wall"></div>
+
+<div class="hint">点击便签，会有小惊喜哦</div>
+<button class="refresh-btn" id="refreshBtn" title="换一批">🔄</button>
+
+<script>
+const messages = [
+  "好好爱自己", "多喝水呦", "早睡早起身体好", "给自己不要太大压力",
+  "今天过得开心吗", "好好睡午觉", "春天来了出去走走吧", "别太累了",
+  "记得吃早餐", "多出去晒晒太阳", "准时早睡", "你很棒的",
+  "记得按时吃饭", "每天都要开心", "偶尔偷懒也没关系",
+  "每天都要开开心心", "你值得被温柔以待", "慢慢来不着急",
+  "今天也要加油鸭", "累了就休息一会儿", "你已经很努力了",
+  "要相信好事即将发生", "吃好喝好心情好", "做自己就好",
+  "生活会越来越好的", "你笑起来真好看", "春风十里不如你",
+  "早安元气满满", "晚安好梦",
+  "春雨绵绵记得带伞", "少吃零食多吃水果",
+  "适当运动保持健康", "遇到困难别怕",
+  "你是最棒的相信自己", "开心的事情会接连发生",
+  "愿你被这个世界温柔对待", "保持微笑好运自来",
+  "每一天都是新的开始", "你的存在本身就是一道光",
+  "不要忘记你有多优秀", "一切都会好起来的",
+  "今天的你也值得被夸奖", "无论如何别忘了吃饭",
+  "你已经是很好很好的人了", "努力的人运气不会太差",
+  "慢慢来花总会开的", "你配得上所有美好",
+  "别忘了你也是别人的宝藏", "困难只是暂时的",
+  "春光正好万物可爱", "记得对自己好一点",
+  "你的微笑是最好的良药", "好运正在派送中",
+  "认真生活就是最大的勇敢", "加油未来可期",
+  "希望你永远被爱包围", "去做你想做的事吧",
+  "愿你如春花般绽放", "三月的风都是甜的",
+  "春天的花为你而开", "和喜欢的一切在一起",
+  "像花儿一样自在地生长", "所有美好都在路上",
+  "你就是人间四月天", "春暖花开万事顺意",
+];
+
+const colors = [
+  ['#FFE082','#FFB300'], ['#A5D6A7','#66BB6A'], ['#EF9A9A','#E57373'],
+  ['#90CAF9','#42A5F5'], ['#CE93D8','#AB47BC'], ['#FFCC80','#FFA726'],
+  ['#80DEEA','#26C6DA'], ['#F48FB1','#EC407A'], ['#C5E1A5','#9CCC65'],
+  ['#FFF59D','#FDD835'], ['#FFAB91','#FF7043'], ['#B2DFDB','#4DB6AC'],
+  ['#D1C4E9','#9575CD'], ['#FFE0B2','#FFB74D'],
+];
+
+const floraEmoji = ['🌸','🌺','🌼','🌷','🍃','🌿','☘️','🪻','🌱','💐','🏵️','🍀'];
+
+function shuffle(a) {
+  const b = [...a];
+  for (let i = b.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [b[i],b[j]] = [b[j],b[i]];
+  }
+  return b;
+}
+
+function rand(min, max) { return Math.random()*(max-min)+min; }
+
+function createFlora() {
+  document.querySelectorAll('.flora').forEach(e => e.remove());
+  for (let i = 0; i < 18; i++) {
+    const el = document.createElement('div');
+    el.className = 'flora';
+    el.textContent = floraEmoji[Math.floor(Math.random()*floraEmoji.length)];
+    el.style.cssText = `
+      left:${rand(0,95)}%;
+      font-size:${rand(16,30)}px;
+      animation-duration:${rand(12,25)}s;
+      animation-delay:${rand(0,12)}s;
+    `;
+    document.body.appendChild(el);
+  }
+}
+
+function renderNotes() {
+  const wall = document.getElementById('wall');
+  wall.innerHTML = '';
+
+  const selected = shuffle(messages).slice(0, 22);
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+
+  const cols = vw < 500 ? 3 : vw < 900 ? 4 : 5;
+  const rows = vw < 500 ? 7 : 5;
+  const cellW = vw / cols;
+  const cellH = (vh - 30) / rows;
+
+  selected.forEach((msg, i) => {
+    const note = document.createElement('div');
+    note.className = 'note';
+
+    const [bg, shadow] = colors[Math.floor(Math.random()*colors.length)];
+    const rotation = rand(-7, 7);
+    const fontClass = `font-${Math.floor(Math.random()*4)+1}`;
+
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const x = col*cellW + rand(8, cellW*0.25);
+    const y = 10 + row*cellH + rand(5, cellH*0.3);
+
+    note.style.cssText = `
+      left:${Math.min(x, vw-160)}px;
+      top:${Math.min(y, vh-55)}px;
+      background:${bg};
+      --rot:${rotation}deg;
+      z-index:${Math.floor(Math.random()*50)};
+      box-shadow:2px 3px 10px rgba(0,0,0,0.1),inset 0 -2px 5px ${shadow}22;
+    `;
+
+    note.innerHTML = `<span class="text ${fontClass}">${msg}</span>`;
+    note.addEventListener('click', e => spawnHeart(e.clientX, e.clientY));
+    wall.appendChild(note);
+
+    // 依次出现，每张间隔 150ms
+    setTimeout(() => note.classList.add('show'), i * 150);
+  });
+}
+
+function spawnHeart(x, y) {
+  const items = ['❤️','💛','💚','🌸','🌺','💖','💕','🌷','🍀','🌼'];
+  for (let i = 0; i < 5; i++) {
+    const el = document.createElement('div');
+    el.className = 'heart-burst';
+    el.textContent = items[Math.floor(Math.random()*items.length)];
+    el.style.left = (x+rand(-30,30))+'px';
+    el.style.top = (y+rand(-20,20))+'px';
+    el.style.animationDelay = (i*0.08)+'s';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1200);
+  }
+}
+
+createFlora();
+renderNotes();
+
+document.getElementById('refreshBtn').addEventListener('click', renderNotes);
+window.addEventListener('resize', renderNotes);
+</script>
+</body>
+</html>
